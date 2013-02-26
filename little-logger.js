@@ -9,7 +9,7 @@ var Logger = exports.Logger = function(level, options) {
 
 Logger.LOG_LEVELS = {
   'DEBUG': {value: 10, color: '\033[34m'},
-  'INFO': {value: 20, color: '\033[37m'},
+  'INFO': {value: 20, color: '\033[0m'},
   'WARN': {value: 30, color: '\033[33m'},
   'ERROR': {value: 40, color: '\033[31m'}
 };
