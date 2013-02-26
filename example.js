@@ -14,3 +14,6 @@ l.error('\tERROR');
 l = new logger.Logger('debug', {color: false});
 l.info('By default, output is colorized.');
 l.warn('But this can be turned off.');
+
+l = new logger.Logger('info', {format: '%a'});
+l.info('The log format can be changed.');
