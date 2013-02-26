@@ -3,9 +3,21 @@ var Logger = exports.Logger = function(level, options) {
 
   options = options || {};
   options.color = options.color || true;
-  options.format = options.format || '%Y/%m/%d %H:%M:%S.%f %level: %message';
+  options.format = options.format || '%Y/%m/%d %H:%M:%S.%f %l: %a';
   options.utc = options.utc || false;
+  options.writer = options.writer || console.log;
   this.options = options;
+
+  var utcStr = this.options.utc ? 'UTC' : '';
+  this.dateFunctions = {
+      '%D': 'to' + utcStr + 'String',
+      '%Y': 'get' + utcStr + 'FullYear',
+      '%m': 'get' + utcStr + 'Month',
+      '%d': 'get' + utcStr + 'Date',
+      '%H': 'get' + utcStr + 'Hours',
+      '%M': 'get' + utcStr + 'Minutes',
+      '%S': 'get' + utcStr + 'Seconds',
+      '%f': 'get' + utcStr + 'Milliseconds'};
 };
 
 Logger.LOG_LEVELS = {
@@ -28,21 +40,19 @@ Logger.prototype.log = function(level, msg, opt_val) {
   var date = new Date();
   var utc = this.options.utc;
   if (val.value >= this.level_val.value) {
-    msg = (this.options.format
-        .replace('%D', utc ? date.toUTCString() : date.toString())
-        .replace('%Y', utc ? date.getUTCFullYear() : date.getFullYear())
-        .replace('%m', 1 + (utc ? date.getUTCMonth() : date.getMonth()))
-        .replace('%d', utc ? date.getUTCDate() : date.getDate())
-        .replace('%H', utc ? date.getUTCHours() : date.getHours())
-        .replace('%M', utc ? date.getUTCMinutes() : date.getMinutes())
-        .replace('%S', utc ? date.getUTCSeconds() : date.getSeconds())
-        .replace('%f', utc ? date.getUTCMilliseconds() : date.getMilliseconds())
-        .replace('%level', level)
-        .replace('%message', msg));
-    if (this.options.color && val.color) {
-      msg = val.color + msg + '\033[0m';
+    var msg_ = this.options.format;
+    for (var format in this.dateFunctions) {
+      var result = date[this.dateFunctions[format]].call(date);
+      if (format === '%m') {
+        result = result + 1;
+      }
+      msg_ = msg_.replace(format, result);
     }
-    console.log(msg);
+    msg_ = msg_.replace('%l', level).replace('%a', msg);
+    if (this.options.color && val.color) {
+      msg_ = val.color + msg_ + '\033[0m';
+    }
+    this.options.writer(msg_);
   }
 };
 
