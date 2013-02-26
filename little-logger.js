@@ -3,7 +3,8 @@ var Logger = exports.Logger = function(level, options) {
 
   options = options || {};
   options.color = options.color || true;
-  options.format = options.format || '%d %l: %m';
+  options.format = options.format || '%Y/%m/%d %H:%M:%S.%f %level: %message';
+  options.utc = options.utc || false;
   this.options = options;
 };
 
@@ -24,8 +25,20 @@ Logger.prototype.level = function(opt_level) {
 
 Logger.prototype.log = function(level, msg, opt_val) {
   var val = opt_val || Logger.LOG_LEVELS[level];
+  var date = new Date();
+  var utc = this.options.utc;
   if (val.value >= this.level_val.value) {
-    msg = this.options.format.replace('%d', new Date()).replace('%l', level).replace('%m', msg);
+    msg = (this.options.format
+        .replace('%D', utc ? date.toUTCString() : date.toString())
+        .replace('%Y', utc ? date.getUTCFullYear() : date.getFullYear())
+        .replace('%m', 1 + (utc ? date.getUTCMonth() : date.getMonth()))
+        .replace('%d', utc ? date.getUTCDate() : date.getDate())
+        .replace('%H', utc ? date.getUTCHours() : date.getHours())
+        .replace('%M', utc ? date.getUTCMinutes() : date.getMinutes())
+        .replace('%S', utc ? date.getUTCSeconds() : date.getSeconds())
+        .replace('%f', utc ? date.getUTCMilliseconds() : date.getMilliseconds())
+        .replace('%level', level)
+        .replace('%message', msg));
     if (this.options.color && val.color) {
       msg = val.color + msg + '\033[0m';
     }
