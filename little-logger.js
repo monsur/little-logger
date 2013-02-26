@@ -1,5 +1,5 @@
 var Logger = exports.Logger = function(level, options) {
-  this.level(level);
+  this.level(level || 'info');
 
   options = options || {};
   options.color = options.color || true;
