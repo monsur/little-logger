@@ -30,16 +30,15 @@ Logger.LOG_LEVELS = {
 Logger.prototype.level = function(opt_level) {
   if (opt_level) {
     this.level_key = opt_level.toUpperCase();
-    this.level_val = Logger.LOG_LEVELS[this.level_key];
   }
   return this.level_key;
 };
 
-Logger.prototype.log = function(level, msg, opt_val) {
-  var val = opt_val || Logger.LOG_LEVELS[level.toUpperCase()];
+Logger.prototype.log = function(level, msg) {
+  var msg_val = Logger.LOG_LEVELS[level.toUpperCase()];
+  var log_val = Logger.LOG_LEVELS[this.level_key.toUpperCase()];
   var date = new Date();
-  var utc = this.options.utc;
-  if (val.value >= this.level_val.value) {
+  if (msg_val.value >= log_val.value) {
     var msg_ = this.options.format;
     for (var format in this.dateFunctions) {
       var result = date[this.dateFunctions[format]].call(date);
@@ -49,18 +48,17 @@ Logger.prototype.log = function(level, msg, opt_val) {
       msg_ = msg_.replace(format, result);
     }
     msg_ = msg_.replace('%l', level).replace('%a', msg);
-    if (this.options.color && val.color) {
-      msg_ = val.color + msg_ + '\033[0m';
+    if (this.options.color && msg_val.color) {
+      msg_ = msg_val.color + msg_ + '\033[0m';
     }
     this.options.writer(msg_);
   }
 };
 
 for (var level in Logger.LOG_LEVELS) {
-  var val = Logger.LOG_LEVELS[level];
-  (function(level, val) {
+  (function(level) {
     Logger.prototype[level.toLowerCase()] = function(msg) {
-      this.log(level, msg, val);
+      this.log(level, msg);
     };
-  })(level, val);
+  })(level);
 }
