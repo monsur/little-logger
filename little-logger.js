@@ -36,7 +36,7 @@ Logger.prototype.level = function(opt_level) {
 };
 
 Logger.prototype.log = function(level, msg, opt_val) {
-  var val = opt_val || Logger.LOG_LEVELS[level];
+  var val = opt_val || Logger.LOG_LEVELS[level.toUpperCase()];
   var date = new Date();
   var utc = this.options.utc;
   if (val.value >= this.level_val.value) {
