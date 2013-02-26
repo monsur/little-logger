@@ -9,7 +9,7 @@ var Logger = exports.Logger = function(level, options) {
 
 Logger.LOG_LEVELS = {
   'DEBUG': {value: 10, color: '\033[34m'},
-  'INFO': {value: 20, color: '\033[0m'},
+  'INFO': {value: 20},
   'WARN': {value: 30, color: '\033[33m'},
   'ERROR': {value: 40, color: '\033[31m'}
 };
@@ -26,7 +26,7 @@ Logger.prototype.log = function(level, msg, opt_val) {
   var val = opt_val || Logger.LOG_LEVELS[level];
   if (val.value >= this.level_val.value) {
     msg = this.options.format.replace('%d', new Date()).replace('%l', level).replace('%m', msg);
-    if (this.options.color) {
+    if (this.options.color && val.color) {
       msg = val.color + msg + '\033[0m';
     }
     console.log(msg);
