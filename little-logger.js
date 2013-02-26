@@ -51,7 +51,7 @@ Logger.prototype.log = function(level, msg) {
     msg_ = msg_val.color + msg_ + '\033[0m';
   }
   if (msg_val.value >= log_val.value) {
-    var writer = msg_val.writer || this.options.writer;
+    var writer = msg_val['writer'] || this.options.writer;
     writer(msg_);
   }
   return msg_;
