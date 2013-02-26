@@ -2,9 +2,9 @@ var Logger = exports.Logger = function(level, options) {
   this.level(level || 'info');
 
   options = options || {};
-  options.color = options.color || true;
+  options.color = 'color' in options ? options.color : true;
+  options.utc = 'utc' in options ? options.utc : false;
   options.format = options.format || '%Y/%m/%d %H:%M:%S.%f %l: %a';
-  options.utc = options.utc || false;
   options.writer = options.writer || console.log;
   this.options = options;
 
