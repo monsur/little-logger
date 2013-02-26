@@ -38,21 +38,23 @@ Logger.prototype.log = function(level, msg) {
   var msg_val = Logger.LOG_LEVELS[level.toUpperCase()];
   var log_val = Logger.LOG_LEVELS[this.level_key.toUpperCase()];
   var date = new Date();
-  if (msg_val.value >= log_val.value) {
-    var msg_ = this.options.format;
-    for (var format in this.dateFunctions) {
-      var result = date[this.dateFunctions[format]].call(date);
-      if (format === '%m') {
-        result = result + 1;
-      }
-      msg_ = msg_.replace(format, result);
+  var msg_ = this.options.format;
+  for (var format in this.dateFunctions) {
+    var result = date[this.dateFunctions[format]].call(date);
+    if (format === '%m') {
+      result = result + 1;
     }
-    msg_ = msg_.replace('%l', level).replace('%a', msg);
-    if (this.options.color && msg_val.color) {
-      msg_ = msg_val.color + msg_ + '\033[0m';
-    }
-    this.options.writer(msg_);
+    msg_ = msg_.replace(format, result);
   }
+  msg_ = msg_.replace('%l', level).replace('%a', msg);
+  if (this.options.color && msg_val.color) {
+    msg_ = msg_val.color + msg_ + '\033[0m';
+  }
+  if (msg_val.value >= log_val.value) {
+    var writer = msg_val.writer || this.options.writer;
+    writer(msg_);
+  }
+  return msg_;
 };
 
 for (var level in Logger.LOG_LEVELS) {
