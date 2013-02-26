@@ -1,3 +1,5 @@
+// type "node example.js" to run these examples.
+
 var logger = require('./little-logger');
 
 var l = new logger.Logger();
