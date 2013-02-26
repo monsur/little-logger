@@ -16,8 +16,8 @@ Logger.LOG_LEVELS = {
 
 Logger.prototype.level = function(opt_level) {
   if (opt_level) {
-  this.level_key = level.toUpperCase();
-  this.level_val = Logger.LOG_LEVELS[this.level_key];
+    this.level_key = level.toUpperCase();
+    this.level_val = Logger.LOG_LEVELS[this.level_key];
   }
   return this.level_key;
 };
