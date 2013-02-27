@@ -41,7 +41,7 @@ var Logger = exports.Logger = function(level, options) {
   options = options || {};
   options.color = 'color' in options ? options.color : true;
   options.utc = 'utc' in options ? options.utc : false;
-  options.format = options.format || '%Y/%m/%d %H:%M:%S.%f %l: %a';
+  options.format = options.format || '%Y-%m-%d %H:%M:%S.%f %l: %a';
   options.writer = options.writer || console.log;
   this.options = options;
 
