@@ -32,3 +32,8 @@ l = new logger.Logger('info', {writer: function(msg) {
   console.log(msg + ' (this message is logged from a custom logger)');
 }});
 l.info('You can even write your own logger function.');
+
+l = new logger.Logger('info', {writer: function() {}});
+l.info('And if you really want even more control.');
+var details = l.info('The log details are returned as JSON, if you want to postprocess.');
+console.log(details);
