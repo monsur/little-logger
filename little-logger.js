@@ -1,3 +1,40 @@
+var pad = function(p, v) {
+  p--;
+  while (p > 0) {
+    if (v < (10^p)) {
+      v = '0' + v;
+    }
+    p--;
+  }
+  return v + '';
+};
+
+var getDateFunctions = function(utc) {
+
+  var getf = function(name, padding) {
+    return function(d) {
+      var val = d[name].call(d);
+      if (padding) {
+        val = pad(padding, val);
+      }
+      return val;
+    }
+  };
+
+  var utcStr = utc ? 'UTC' : '';
+
+  return {
+    '%D': getf('to' + utcStr + 'String'),
+    '%Y': getf('get' + utcStr + 'FullYear'),
+    '%m': function(d) { return pad(2, d.getMonth() + 1); },
+    '%d': getf('get' + utcStr + 'Date', 2),
+    '%H': getf('get' + utcStr + 'Hours', 2),
+    '%M': getf('get' + utcStr + 'Minutes', 2),
+    '%S': getf('get' + utcStr + 'Seconds', 2),
+    '%f': getf('get' + utcStr + 'Milliseconds', 3),
+  }
+};
+
 var Logger = exports.Logger = function(level, options) {
   this.level(level || 'info');
 
@@ -8,16 +45,7 @@ var Logger = exports.Logger = function(level, options) {
   options.writer = options.writer || console.log;
   this.options = options;
 
-  var utcStr = this.options.utc ? 'UTC' : '';
-  this.dateFunctions = {
-      '%D': 'to' + utcStr + 'String',
-      '%Y': 'get' + utcStr + 'FullYear',
-      '%m': 'get' + utcStr + 'Month',
-      '%d': 'get' + utcStr + 'Date',
-      '%H': 'get' + utcStr + 'Hours',
-      '%M': 'get' + utcStr + 'Minutes',
-      '%S': 'get' + utcStr + 'Seconds',
-      '%f': 'get' + utcStr + 'Milliseconds'};
+  this.dateFunctions = getDateFunctions(this.options.utc);
 };
 
 Logger.LOG_LEVELS = {
@@ -40,11 +68,10 @@ Logger.prototype.log = function(level, msg) {
   var date = new Date();
   var msg_ = this.options.format;
   for (var format in this.dateFunctions) {
-    var result = date[this.dateFunctions[format]].call(date);
-    if (format === '%m') {
-      result = result + 1;
+    if (msg_.indexOf(format) > -1) {
+      var result = this.dateFunctions[format].call({}, date);
+      msg_ = msg_.replace(format, result);
     }
-    msg_ = msg_.replace(format, result);
   }
   msg_ = msg_.replace('%l', level).replace('%a', msg);
   if (this.options.color && msg_val.color) {
