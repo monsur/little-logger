@@ -1,0 +1,19 @@
+{
+  "name": "little-logger",
+  "description": "A little logging utility for Node.js",
+  "version": "0.1.0",
+  "author": "Monsur Hossain <monsur@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monsur/little-logger"
+  },
+  "keywords": [
+    "logging",
+    "tools"
+  ],
+  "main": "./little-logger",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.4.0"
+  }
+}
