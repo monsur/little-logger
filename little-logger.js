@@ -92,7 +92,7 @@ Logger.prototype.log = function(level, msg) {
 for (var level in Logger.LOG_LEVELS) {
   (function(level) {
     Logger.prototype[level.toLowerCase()] = function(msg) {
-      this.log(level, msg);
+      return this.log(level, msg);
     };
   })(level);
 }
