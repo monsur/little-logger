@@ -12,4 +12,25 @@ Though it may be little, it still packs some nice features, like:
   * Log to stdio, stderr, or specify your own logging function.
   * Small code base: less than 100 loc, no external dependencies.
 
-Take a look at [example.js](example.js) for usage info.
+
+## Install
+
+    npm install little-logger
+
+
+## Usage
+
+Take a look at [example.js](https://github.com/monsur/little-logger/blob/master/example.js) for complete usage info. Here's an example:
+
+    var logger = require('./little-logger');
+
+    var l = new logger.Logger();
+    l.info('The default log level is "info".');
+
+    l = new logger.Logger('debug');
+    l.info('This logger will log any message at level DEBUG or higher.');
+    l.info('Supports four log levels:');
+    l.debug('DEBUG');
+    l.info('INFO');
+    l.warn('WARN');
+    l.error('ERROR');
