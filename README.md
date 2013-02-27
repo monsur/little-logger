@@ -12,4 +12,4 @@ Though it may be little, it still packs some nice features, like:
   * Log to stdio, stderr, or specify your own logging function.
   * Small code base: less than 100 loc, no external dependencies.
 
-Take a look at example.js for usage info.
+Take a look at [example.js](example.js) for usage info.
