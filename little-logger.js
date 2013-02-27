@@ -81,7 +81,12 @@ Logger.prototype.log = function(level, msg) {
     var writer = msg_val['writer'] || this.options.writer;
     writer(msg_);
   }
-  return msg_;
+  return {
+    date: date,
+    level: level,
+    message: msg,
+    formattedMessage: msg_
+  };
 };
 
 for (var level in Logger.LOG_LEVELS) {
