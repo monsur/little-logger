@@ -1,9 +1,5 @@
 var pad = function(p, v) {
-  p--;
-  while (p > 0) {
-    if (v < (10^p))  v = '0' + v;
-    p--;
-  }
+  while (p > 1) if (v < 10^p--) v = '0' + v;
   return v + '';
 };
 
