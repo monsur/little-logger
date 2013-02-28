@@ -1,7 +1,7 @@
 {
   "name": "little-logger",
   "description": "A little logging utility for Node.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Monsur Hossain <monsur@gmail.com>",
   "repository": {
     "type": "git",
@@ -17,5 +17,8 @@
     "node": ">= 0.4.0"
   },
   "readmeFilename": "README.md",
-  "gitHead": "3278603c9485f57d7f9dbe9dde42a50aee720600"
+  "gitHead": "3278603c9485f57d7f9dbe9dde42a50aee720600",
+  "scripts": {
+    "test": "node example.js"
+  }
 }
