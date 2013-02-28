@@ -62,11 +62,12 @@ Logger.prototype.log = function(level, msg) {
   var msg_val = Logger.LOG_LEVELS[level.toUpperCase()];
   var log_val = Logger.LOG_LEVELS[this.level_key.toUpperCase()];
   var date = new Date(), buff = [], prevPos = 0, pos = -1;
+  var format = this.options.format;
   // Using indexOf will probably be fastest, according to:
   // http://jsperf.com/multiple-string-replace
-  while ((pos = this.options.format.indexOf('%', prevPos)) > -1) {
-    buff.push(this.options.format.substring(prevPos, pos));
-    var c1 = this.options.format.charAt(++pos);
+  while ((pos = format.indexOf('%', prevPos)) > -1) {
+    buff.push(format.substring(prevPos, pos));
+    var c1 = format.charAt(++pos);
     if (this.formatFunctions.hasOwnProperty(c1)) {
       buff.push(this.formatFunctions[c1].call({}, date, level, msg));
     } else {
@@ -75,7 +76,7 @@ Logger.prototype.log = function(level, msg) {
     }
     prevPos = pos + 1;
   }
-  buff.push(this.options.format.substring(prevPos));
+  buff.push(format.substring(prevPos));
   if (this.options.color && msg_val.color) {
     buff.unshift(msg_val.color);
     buff.push('\033[0m');
