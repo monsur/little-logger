@@ -8,8 +8,7 @@ var getFormatFunctions = function(utc) {
   var getf = function(name, padding) {
     return function(d) {
       var val = d[name].call(d);
-      if (padding) val = pad(padding, val);
-      return val;
+      return padding ? pad(padding, val) : val;
     }
   };
   var utcStr = utc ? 'UTC' : '';
