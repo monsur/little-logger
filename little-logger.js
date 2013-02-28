@@ -1,7 +1,7 @@
 var pad = function(p, v) {
   v = v + '';
   var padLength = p - v.length;
-  return padLength > -1 ? Array(padLength+1).join('0') + v : v;
+  return padLength > -1 ? Array(padLength + 1).join('0') + v : v;
 };
 
 var getFormatFunctions = function(utc) {
@@ -9,7 +9,7 @@ var getFormatFunctions = function(utc) {
     return function(d) {
       var val = d[name].call(d);
       return padding ? pad(padding, val) : val;
-    }
+    };
   };
   var utcStr = utc ? 'UTC' : '';
   return {
@@ -21,10 +21,10 @@ var getFormatFunctions = function(utc) {
     'M': getf('get' + utcStr + 'Minutes', 2),
     'S': getf('get' + utcStr + 'Seconds', 2),
     'f': getf('get' + utcStr + 'Milliseconds', 3),
-    '%': function(d) { return '%'; },
+    '%': function() { return '%'; },
     'l': function(d, l, a) { return l; },
     'a': function(d, l, a) { return a; }
-  }
+  };
 };
 
 var getArgumentsAsArray = function(args) {
@@ -67,13 +67,13 @@ Logger.prototype.log = function(level, msg) {
   while ((pos = this.options.format.indexOf('%', prevPos)) > -1) {
     buff.push(this.options.format.substring(prevPos, pos));
     var c1 = this.options.format.charAt(++pos);
-    if (c1 in this.formatFunctions) {
+    if (this.formatFunctions.hasOwnProperty(c1)) {
       buff.push(this.formatFunctions[c1].call({}, date, level, msg));
     } else {
       buff.push('%');
       buff.push(c1);
     }
-    prevPos = pos+1;
+    prevPos = pos + 1;
   }
   buff.push(this.options.format.substring(prevPos));
   if (this.options.color && msg_val.color) {
