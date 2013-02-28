@@ -7,7 +7,7 @@ var pad = function(p, v) {
 var getFormatFunctions = function(utc) {
   var getf = function(name, padding) {
     return function(d) {
-      var val = d[name].call(d);
+      var val = d[name]();
       return padding ? pad(padding, val) : val;
     };
   };
@@ -15,7 +15,7 @@ var getFormatFunctions = function(utc) {
   return {
     'D': getf('to' + utcStr + 'String'),
     'Y': getf('get' + utcStr + 'FullYear'),
-    'm': function(d) { return pad(2, d.getMonth() + 1); },
+    'm': function(d) { return pad(2, d['get' + utcStr + 'Month']() + 1); },
     'd': getf('get' + utcStr + 'Date', 2),
     'H': getf('get' + utcStr + 'Hours', 2),
     'M': getf('get' + utcStr + 'Minutes', 2),
