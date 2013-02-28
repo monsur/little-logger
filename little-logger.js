@@ -71,8 +71,7 @@ Logger.prototype.log = function(level, msg) {
     if (this.formatFunctions.hasOwnProperty(c1)) {
       buff.push(this.formatFunctions[c1].call({}, date, level, msg));
     } else {
-      buff.push('%');
-      buff.push(c1);
+      buff.push('%', c1);
     }
     prevPos = pos + 1;
   }
