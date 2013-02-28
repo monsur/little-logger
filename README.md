@@ -1,8 +1,8 @@
 # little-logger
 
-Sometimes you need a robust logging mechanism for your enterprise-level system. For those times, little-logger is not for you.
+Sometimes you need a robust logging mechanism for your enterprise-level system. Little-logger is not for those times.
 
-Little-logger is a little logging utility for node.js. Its more for those times when you need to sprinkle a little logging in your code.
+Little-logger is a little logging utility for Node.js. Its for those times when you need to sprinkle a little logging throughout your code.
 
 Though it may be little, it still packs some nice features, like:
 
