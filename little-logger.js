@@ -1,10 +1,7 @@
 var pad = function(p, v) {
   v = v + '';
   var padLength = p - v.length;
-  if (padLength > -1) {
-    return Array(padLength+1).join('0') + v;
-  }
-  return v;
+  return padLength > -1 ? Array(padLength+1).join('0') + v : v;
 };
 
 var getDateFunctions = function(utc) {
