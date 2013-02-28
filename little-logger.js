@@ -28,11 +28,19 @@ var getFormatFunctions = function(utc) {
   }
 };
 
+var getArgumentsAsArray = function(args) {
+  return [].splice.call(args, 0);
+};
+
+var getBooleanValue = function(val, default_val) {
+  return (val === true || val === false) ? val : default_val;
+};
+
 var Logger = exports.Logger = function(level, options) {
   this.level(level || 'info');
   options = options || {};
-  options.color = 'color' in options ? options.color : true;
-  options.utc = 'utc' in options ? options.utc : false;
+  options.color = getBooleanValue(options.color, true);
+  options.utc = getBooleanValue(options.utc, false);
   options.format = options.format || '%Y-%m-%d %H:%M:%S.%f %l: %a';
   options.writer = options.writer || console.log;
   this.options = options;
@@ -76,8 +84,8 @@ Logger.prototype.log = function(level, msg) {
   }
   var formattedMsg = buff.join('');
   if (msg_val.value >= log_val.value) {
-    var writer = msg_val['writer'] || this.options.writer;
-    var args = [].splice.call(arguments,0).splice(2);
+    var writer = msg_val.writer || this.options.writer;
+    var args = getArgumentsAsArray(arguments).splice(2);
     args.unshift(formattedMsg);
     writer.apply(this, args);
   }
@@ -92,7 +100,7 @@ Logger.prototype.log = function(level, msg) {
 for (var level in Logger.LOG_LEVELS) {
   (function(level) {
     Logger.prototype[level.toLowerCase()] = function(msg) {
-      var args = [].splice.call(arguments,0);
+      var args = getArgumentsAsArray(arguments);
       args.unshift(level);
       return this.log.apply(this, args);
     };
