@@ -1,6 +1,6 @@
 var pad = function(p, v) {
-  while (p > 1) if (v < 10^p--) v = '0' + v;
-  return v + '';
+  v = v + '';
+  return Array(p-v.length+1).join('0') + v;
 };
 
 var getDateFunctions = function(utc) {
@@ -54,8 +54,7 @@ Logger.prototype.log = function(level, msg) {
   var msg_ = this.options.format;
   for (var format in this.dateFunctions) {
     if (msg_.indexOf(format) > -1) {
-      var result = this.dateFunctions[format].call({}, date);
-      msg_ = msg_.replace(format, result);
+      msg_ = msg_.replace(format, this.dateFunctions[format].call({}, date));
     }
   }
   msg_ = msg_.replace('%l', level).replace('%a', msg);
