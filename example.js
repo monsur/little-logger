@@ -37,3 +37,7 @@ l = new logger.Logger('info', {writer: function() {}});
 l.info('And if you really want even more control.');
 var details = l.info('The log details are returned as JSON, if you want to postprocess.');
 console.log(details);
+
+l = new logger.Logger('info');
+l.info('Supports %s style formatting.', 'util.format');
+// More info: http://nodejs.org/api/util.html#util_util_format_format

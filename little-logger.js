@@ -1,28 +1,21 @@
 var pad = function(p, v) {
   p--;
   while (p > 0) {
-    if (v < (10^p)) {
-      v = '0' + v;
-    }
+    if (v < (10^p))  v = '0' + v;
     p--;
   }
   return v + '';
 };
 
 var getDateFunctions = function(utc) {
-
   var getf = function(name, padding) {
     return function(d) {
       var val = d[name].call(d);
-      if (padding) {
-        val = pad(padding, val);
-      }
+      if (padding) val = pad(padding, val);
       return val;
     }
   };
-
   var utcStr = utc ? 'UTC' : '';
-
   return {
     '%D': getf('to' + utcStr + 'String'),
     '%Y': getf('get' + utcStr + 'FullYear'),
@@ -37,14 +30,12 @@ var getDateFunctions = function(utc) {
 
 var Logger = exports.Logger = function(level, options) {
   this.level(level || 'info');
-
   options = options || {};
   options.color = 'color' in options ? options.color : true;
   options.utc = 'utc' in options ? options.utc : false;
   options.format = options.format || '%Y-%m-%d %H:%M:%S.%f %l: %a';
   options.writer = options.writer || console.log;
   this.options = options;
-
   this.dateFunctions = getDateFunctions(this.options.utc);
 };
 
@@ -56,9 +47,7 @@ Logger.LOG_LEVELS = {
 };
 
 Logger.prototype.level = function(opt_level) {
-  if (opt_level) {
-    this.level_key = opt_level.toUpperCase();
-  }
+  if (opt_level) this.level_key = opt_level.toUpperCase();
   return this.level_key;
 };
 
@@ -79,7 +68,9 @@ Logger.prototype.log = function(level, msg) {
   }
   if (msg_val.value >= log_val.value) {
     var writer = msg_val['writer'] || this.options.writer;
-    writer(msg_);
+    var args = [].splice.call(arguments,0).splice(2);
+    args.unshift(msg_);
+    writer.apply(this, args);
   }
   return {
     date: date,
@@ -92,7 +83,9 @@ Logger.prototype.log = function(level, msg) {
 for (var level in Logger.LOG_LEVELS) {
   (function(level) {
     Logger.prototype[level.toLowerCase()] = function(msg) {
-      return this.log(level, msg);
+      var args = [].splice.call(arguments,0);
+      args.unshift(level);
+      return this.log.apply(this, args);
     };
   })(level);
 }
