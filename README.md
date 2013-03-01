@@ -10,7 +10,8 @@ Though it may be little, it still packs some nice features, like:
   * Colorized output
   * Custom formatters for controlling the output
   * Log to stdio, stderr, or specify your own logging function.
-  * Small code base: ~100 loc, no external dependencies.
+  * Individual levels can be logged to different locations.
+  * Small code base: less than 100 loc, no external dependencies.
 
 
 ## Install
