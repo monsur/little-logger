@@ -22,7 +22,8 @@ var getFormatFunctions = function(utc) {
     '%S': getf('get' + utcStr + 'Seconds', 2),
     '%f': getf('get' + utcStr + 'Milliseconds', 3),
     '%%': function() { return '%'; },
-    '%l': function(d, l, a) { return l; },
+    '%L': function(d, l, a) { return l.toUpperCase(); },
+    '%l': function(d, l, a) { return l.toLowerCase(); },
     '%a': function(d, l, a) { return a; }
   };
 };
@@ -67,6 +68,7 @@ Logger.prototype.log = function(level, msg) {
   if (!this.options.enabled) return this;
   var msg_val = Logger.LOG_LEVELS[level.toUpperCase()];
   var log_val = Logger.LOG_LEVELS[this.level_key.toUpperCase()];
+  if (msg_val.value < log_val.value) return this;
   var date = new Date();
   var formattedMsg = this.options.format;
   // http://jsperf.com/multiple-string-replace/2
@@ -79,12 +81,10 @@ Logger.prototype.log = function(level, msg) {
   if (this.options.color && msg_val.color) {
     formattedMsg = msg_val.color + formattedMsg + '\033[0m';
   }
-  if (msg_val.value >= log_val.value) {
-    var writer = msg_val.writer || this.options.writer;
-    var args = [].splice.call(arguments, 0).splice(2);
-    args.unshift(formattedMsg);
-    writer.apply(this, args);
-  }
+  var writer = msg_val.writer || this.options.writer;
+  var args = [].splice.call(arguments, 0).splice(2);
+  args.unshift(formattedMsg);
+  writer.apply(this, args);
   return this;
 };
 
