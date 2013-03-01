@@ -38,6 +38,7 @@ var getBooleanValue = function(val, default_val) {
 var Logger = exports.Logger = function(level, options) {
   this.level(level || 'info');
   options = options || {};
+  options.enabled = getBooleanValue(options.enabled, true);
   options.color = getBooleanValue(options.color, true);
   options.utc = getBooleanValue(options.utc, false);
   options.format = options.format || '%Y-%m-%d %H:%M:%S.%f %l: %a';
@@ -53,12 +54,23 @@ Logger.LOG_LEVELS = {
   'ERROR': {value: 40, color: '\033[31m'}
 };
 
+Logger.prototype.enable = function() {
+    this.options.enabled = true;
+    return this;
+  };
+
+Logger.prototype.disable = function() {
+  this.options.enabled = false;
+  return this;
+};
+
 Logger.prototype.level = function(opt_level) {
   if (opt_level) this.level_key = opt_level.toUpperCase();
   return this.level_key;
 };
 
 Logger.prototype.log = function(level, msg) {
+  if (!this.options.enabled) return this;
   var msg_val = Logger.LOG_LEVELS[level.toUpperCase()];
   var log_val = Logger.LOG_LEVELS[this.level_key.toUpperCase()];
   var date = new Date();
@@ -79,12 +91,7 @@ Logger.prototype.log = function(level, msg) {
     args.unshift(formattedMsg);
     writer.apply(this, args);
   }
-  return {
-    date: date,
-    level: level,
-    message: msg,
-    formattedMessage: formattedMsg
-  };
+  return this;
 };
 
 for (var level in Logger.LOG_LEVELS) {
