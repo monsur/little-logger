@@ -13,17 +13,17 @@ var getFormatFunctions = function(utc) {
   };
   var utcStr = utc ? 'UTC' : '';
   return {
-    'D': getf('to' + utcStr + 'String'),
-    'Y': getf('get' + utcStr + 'FullYear'),
-    'm': function(d) { return pad(2, d['get' + utcStr + 'Month']() + 1); },
-    'd': getf('get' + utcStr + 'Date', 2),
-    'H': getf('get' + utcStr + 'Hours', 2),
-    'M': getf('get' + utcStr + 'Minutes', 2),
-    'S': getf('get' + utcStr + 'Seconds', 2),
-    'f': getf('get' + utcStr + 'Milliseconds', 3),
-    '%': function() { return '%'; },
-    'l': function(d, l, a) { return l; },
-    'a': function(d, l, a) { return a; }
+    '%D': getf('to' + utcStr + 'String'),
+    '%Y': getf('get' + utcStr + 'FullYear'),
+    '%m': function(d) { return pad(2, d['get' + utcStr + 'Month']() + 1); },
+    '%d': getf('get' + utcStr + 'Date', 2),
+    '%H': getf('get' + utcStr + 'Hours', 2),
+    '%M': getf('get' + utcStr + 'Minutes', 2),
+    '%S': getf('get' + utcStr + 'Seconds', 2),
+    '%f': getf('get' + utcStr + 'Milliseconds', 3),
+    '%%': function() { return '%'; },
+    '%l': function(d, l, a) { return l; },
+    '%a': function(d, l, a) { return a; }
   };
 };
 
@@ -61,26 +61,18 @@ Logger.prototype.level = function(opt_level) {
 Logger.prototype.log = function(level, msg) {
   var msg_val = Logger.LOG_LEVELS[level.toUpperCase()];
   var log_val = Logger.LOG_LEVELS[this.level_key.toUpperCase()];
-  var date = new Date(), buff = [], prevPos = 0, pos = -1;
-  var format = this.options.format;
-  // Using indexOf will probably be fastest, according to:
-  // http://jsperf.com/multiple-string-replace
-  while ((pos = format.indexOf('%', prevPos)) > -1) {
-    buff.push(format.substring(prevPos, pos));
-    var c1 = format.charAt(++pos);
-    if (this.formatFunctions.hasOwnProperty(c1)) {
-      buff.push(this.formatFunctions[c1].call({}, date, level, msg));
-    } else {
-      buff.push('%', c1);
+  var date = new Date();
+  var formattedMsg = this.options.format;
+  // http://jsperf.com/multiple-string-replace/2
+  for (var format in this.formatFunctions) {
+    if (formattedMsg.indexOf(format) > -1) {
+      formattedMsg = formattedMsg.replace(format,
+          this.formatFunctions[format].call({}, date, level, msg));
     }
-    prevPos = pos + 1;
   }
-  buff.push(format.substring(prevPos));
   if (this.options.color && msg_val.color) {
-    buff.unshift(msg_val.color);
-    buff.push('\033[0m');
+    formattedMsg = msg_val.color + formattedMsg + '\033[0m';
   }
-  var formattedMsg = buff.join('');
   if (msg_val.value >= log_val.value) {
     var writer = msg_val.writer || this.options.writer;
     var args = getArgumentsAsArray(arguments).splice(2);
