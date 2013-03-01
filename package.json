@@ -1,7 +1,7 @@
 {
   "name": "little-logger",
   "description": "A little logging utility for Node.js",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Monsur Hossain <monsur@gmail.com>",
   "repository": {
     "type": "git",
