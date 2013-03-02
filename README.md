@@ -18,12 +18,13 @@ Though it may be little, it still packs some nice features, like:
 
     npm install little-logger
 
+Or just copy [little-logger.js](https://raw.github.com/monsur/little-logger/master/little-logger.js) to your project directory.
 
 ## Usage
 
 Take a look at [example.js](https://github.com/monsur/little-logger/blob/master/example.js) for complete usage info. Here's an example:
 
-    var logger = require('./little-logger');
+    var logger = require('little-logger');
 
     var l = new logger.Logger();
     l.info('The default log level is "info".');
