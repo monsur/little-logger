@@ -70,7 +70,23 @@ Whie logs the date in YYYY-mm-dd format, followed by the time, followed by the l
   * _%L_ - The log level (uppercase).
   * _%a_ - The log message.
   * _%%_ - The '%' symbol.
-    
+
+
+### Methods
+
+`debug(msg)`
+`info(msg)`
+`warn(msg)`
+`error(msg)` - Logs a message of the given type. Supports additional formatting parameters, see the [Node.js docs](http://nodejs.org/api/util.html#util_util_format_format) for more details.
+
+`log(level, msg)` - Logs a message of the given log level. The methods above are all shorthand for the `log()` method.
+
+`enable()`
+`disable()` - Enables or disables logging.
+
+`level()` - Returns the current log level.
+
+`level(l)` - Sets the current log level.
 
 
 
