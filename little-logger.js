@@ -82,8 +82,7 @@ Logger.prototype.log = function(level, msg) {
     formattedMsg = msg_val.color + formattedMsg + '\033[0m';
   }
   var writer = msg_val.writer || this.options.writer;
-  var args = [].splice.call(arguments, 0).splice(2);
-  args.unshift(formattedMsg);
+  var args = [formattedMsg].concat([].splice.call(arguments, 2));
   writer.apply(this, args);
   return this;
 };
@@ -91,8 +90,7 @@ Logger.prototype.log = function(level, msg) {
 for (var level in Logger.LOG_LEVELS) {
   (function(level) {
     Logger.prototype[level.toLowerCase()] = function(msg) {
-      var args = [].splice.call(arguments, 0);
-      args.unshift(level);
+      var args = [level].concat([].splice.call(arguments, 0));
       return this.log.apply(this, args);
     };
   })(level);
